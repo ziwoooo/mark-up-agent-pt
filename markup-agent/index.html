@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markup Automation Agent - 발표 자료</title>
+    <style>
+      :root {
+        --primary: #d4a574;
+        --primary-dark: #c4956a;
+        --accent: #f5c842;
+        --bg-dark: #fffdf9;
+        --bg-card: #faf6f0;
+        --text: #2d2a26;
+        --text-muted: #6b635a;
+        --success: #7cb342;
+        --warning: #f5c842;
+        --error: #c9302c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Pretendard",
+          -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        background: var(--bg-dark);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .slide {
+        min-height: 100vh;
+        padding: 60px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-bottom: 1px solid #e5ddd3;
+        position: relative;
+      }
+
+      .slide-number {
+        position: absolute;
+        top: 30px;
+        right: 40px;
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+        color: #2d2a26;
+      }
+
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: var(--text);
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: var(--primary);
+      }
+
+      p {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+      }
+
+      .highlight {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+      }
+
+      th,
+      td {
+        padding: 10px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e5ddd3;
+      }
+
+      th {
+        background: var(--bg-card);
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background: rgba(212, 165, 116, 0.15);
+      }
+
+      code {
+        background: #e5ddd3;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.9em;
+      }
+
+      pre {
+        background: #f5f0e8;
+        padding: 24px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .badge-success {
+        background: rgba(124, 179, 66, 0.2);
+        color: var(--success);
+      }
+      .badge-warning {
+        background: rgba(245, 200, 66, 0.3);
+        color: #9a7b00;
+      }
+      .badge-error {
+        background: rgba(201, 48, 44, 0.15);
+        color: var(--error);
+      }
+
+      .score-display {
+        font-size: 5rem;
+        font-weight: 800;
+        color: var(--success);
+        text-align: center;
+      }
+
+      .workflow-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+
+      .workflow-step {
+        background: var(--bg-card);
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .workflow-step.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      .arrow {
+        font-size: 1.5rem;
+        color: var(--text-muted);
+      }
+
+      /* 결과물 이미지 스크롤 섹션 */
+      .result-section {
+        margin: 24px 0;
+      }
+
+      .result-label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: var(--primary);
+      }
+
+      .result-image-container {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 12px;
+        height: 350px;
+        overflow-y: auto;
+        border: 2px dashed #d4cdc3;
+      }
+
+      .result-image-container img {
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .result-image-placeholder {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        font-size: 1rem;
+      }
+
+      .version-flow {
+        display: flex;
+        align-items: stretch;
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .version-card {
+        flex: 1;
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .version-card h4 {
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      .version-card .version-num {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+      }
+
+      .version-card .image-scroll {
+        flex: 1;
+        min-height: 350px;
+        max-height: 450px;
+        overflow-y: auto;
+        background: #f5f0e8;
+        border-radius: 8px;
+        border: 2px dashed #d4cdc3;
+      }
+
+      .version-card .image-scroll img {
+        width: 100%;
+        display: block;
+      }
+
+      .version-card .image-placeholder {
+        height: 100%;
+        min-height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+      }
+
+      .version-arrow {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        color: var(--primary);
+      }
+
+      /* 비교 섹션 */
+      .compare-section {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .compare-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 24px;
+      }
+
+      .compare-card.before {
+        border: 2px solid var(--error);
+      }
+
+      .compare-card.after {
+        border: 2px solid var(--success);
+      }
+
+      .compare-arrow {
+        display: flex;
+        align-items: center;
+        font-size: 2.5rem;
+        color: var(--primary);
+        padding-top: 100px;
+      }
+
+      /* 기획서 이미지 그리드 */
+      .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin: 24px 0;
+      }
+
+      .spec-image {
+        background: var(--bg-card);
+        border-radius: 8px;
+        padding: 8px;
+        aspect-ratio: 3/4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #d4cdc3;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      /* 규칙 목록 */
+      .rule-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .rule-item {
+        background: var(--bg-card);
+        padding: 16px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .rule-item .num {
+        background: var(--primary);
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      /* Modal styles */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        cursor: pointer;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: var(--bg-card);
+        border-radius: 16px;
+        width: 95vw;
+        height: 95vh;
+        overflow-y: auto;
+        padding: 60px 40px 40px;
+        cursor: default;
+        position: relative;
+      }
+
+      .modal-content img {
+        width: 100%;
+        max-width: 100%;
+        display: block;
+      }
+
+      .modal-close {
+        position: fixed;
+        top: calc(2.5vh + 16px);
+        right: calc(2.5vw + 16px);
+        width: 40px;
+        height: 40px;
+        background: var(--text);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+      }
+
+      .modal-close:hover {
+        background: var(--error);
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 16px;
+        padding-right: 50px;
+      }
+
+      .version-card .image-scroll {
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+
+      .version-card .image-scroll:hover {
+        border-color: var(--primary);
+        transform: scale(1.02);
+      }
+
+      /* Print styles */
+      @media print {
+        body {
+          background: white;
+          color: #2d2a26;
+        }
+
+        .slide {
+          page-break-after: always;
+          min-height: auto;
+          padding: 40px;
+          border: none;
+        }
+
+        .slide:last-child {
+          page-break-after: auto;
+        }
+
+        h1 {
+          background: none;
+          -webkit-text-fill-color: #2d2a26;
+          color: #2d2a26;
+        }
+
+        .card,
+        .version-card,
+        .compare-card,
+        .rule-item {
+          background: #faf6f0;
+          border: 1px solid #e5ddd3;
+        }
+
+        th {
+          background: #faf6f0;
+        }
+
+        pre {
+          background: #f5f0e8;
+          border: 1px solid #e5ddd3;
+        }
+
+        .version-card .image-scroll,
+        .result-image-container {
+          border: 1px solid #e5ddd3;
+          background: #f5f0e8;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Slide 1: 타이틀 -->
+    <section class="slide">
+      <span class="slide-number">01</span>
+      <h1>Markup Automation Agent</h1>
+      <p class="subtitle">Claude Code Skill 기반 마크업 자동 생성 에이전트</p>
+      <div style="margin: 20px 0">
+        <h3 style="margin-bottom: 8px">핵심 기능</h3>
+        <p style="margin: 0; font-size: 1.1rem">
+          - 다중 프레임워크 지원: HTML, Nuxt 2/3, React, Next.js 자동 감지
+        </p>
+        <p style="margin: 0; font-size: 1.1rem">
+          - CSS 방식 자동 감지: Tailwind, SCSS, CSS Modules
+        </p>
+        <p style="margin: 0; font-size: 1.1rem">
+          - 기존 코드베이스 학습: 컨벤션, 공통 컴포넌트 재사용
+        </p>
+        <p style="margin: 0; font-size: 1.1rem">
+          - 14가지 품질 검증: 95점 이상 필수, 자동 수정 지원
+        </p>
+      </div>
+      <div class="workflow-arrow">
+        <span class="workflow-step">PLAN</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">LEARN</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">DESIGN</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step active">GENERATE</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">VALIDATE</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">OUTPUT</span>
+      </div>
+      <div class="grid-3" style="margin-top: 24px">
+        <div class="card" style="text-align: center">
+          <h3>14가지</h3>
+          <p>품질 검증 기준</p>
+        </div>
+        <div class="card" style="text-align: center">
+          <h3>95점+</h3>
+          <p>필수 통과 점수</p>
+        </div>
+        <div class="card" style="text-align: center">
+          <h3>6단계</h3>
+          <p>자동화 워크플로우</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: 프로젝트 소개 상세 -->
+    <section class="slide">
+      <span class="slide-number">02</span>
+      <h2>핵심 가치</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>자동화</h3>
+          <p>기획서 + 디자인 → 완성 코드</p>
+          <p>수작업 대비 <span class="highlight">80% 시간 단축</span></p>
+        </div>
+        <div class="card">
+          <h3>품질 보장</h3>
+          <p>14가지 기준 자동 검증</p>
+          <p><span class="highlight">95점 이상</span> 필수 통과</p>
+        </div>
+        <div class="card">
+          <h3>컨벤션 준수</h3>
+          <p>기존 프로젝트 패턴 학습</p>
+          <p>일관된 코드 스타일 유지</p>
+        </div>
+        <div class="card">
+          <h3>증분 업데이트</h3>
+          <p>변경 시 기존 코드 수정</p>
+          <p>재생성 금지 원칙</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2.5: 버전별 결과물 비교 (NEW) -->
+    <section class="slide">
+      <span class="slide-number">03</span>
+      <h2>버전별 업데이트 결과물</h2>
+      <p style="margin-bottom: 24px">
+        실제 9주년 이벤트 페이지 마크업 개선 과정
+      </p>
+
+      <div class="version-flow">
+        <div class="version-card">
+          <h4>1단계 결과물</h4>
+          <p class="version-num">v1.0.1 ~ v1.0.2</p>
+          <div class="image-scroll">
+            <img src="images/1.png" alt="v1.0.1~v1.0.2 결과물" />
+          </div>
+        </div>
+
+        <div class="version-arrow">→</div>
+
+        <div class="version-card">
+          <h4>2단계 결과물</h4>
+          <p class="version-num">v1.0.3</p>
+          <div class="image-scroll">
+            <img src="images/2.png" alt="v1.0.3 결과물" />
+          </div>
+        </div>
+
+        <div class="version-arrow">→</div>
+
+        <div class="version-card">
+          <h4>3단계 결과물</h4>
+          <p class="version-num">v1.0.4</p>
+          <div class="image-scroll">
+            <img src="images/3.png" alt="v1.0.4 결과물" />
+          </div>
+        </div>
+      </div>
+
+      <p style="text-align: center; color: var(--text-muted)">
+        클릭하면 크게 볼 수 있습니다
+      </p>
+    </section>
+
+    <!-- Slide 4: 버전별 이슈 → 규칙 -->
+    <section class="slide">
+      <span class="slide-number">04</span>
+      <h2>버전별 발견된 이슈</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>v1.0.1 이슈</h3>
+          <table style="margin: 0">
+            <tr>
+              <td>DOM 뎁스 4단계 초과</td>
+            </tr>
+            <tr>
+              <td>불필요한 Wrapper 요소</td>
+            </tr>
+            <tr>
+              <td>aria-label 누락 (nav, button)</td>
+            </tr>
+          </table>
+          <p style="color: var(--success); margin-top: 12px">
+            → aria-label 필수 요소 정의
+          </p>
+        </div>
+        <div class="card">
+          <h3>v1.0.2 이슈</h3>
+          <table style="margin: 0">
+            <tr>
+              <td>비활성 조건 4개 미구현</td>
+            </tr>
+            <tr>
+              <td>interface 필드 누락</td>
+            </tr>
+            <tr>
+              <td>조건부 UI 분기 누락</td>
+            </tr>
+            <tr>
+              <td>다단계 프로세스 미구현</td>
+            </tr>
+          </table>
+          <p style="color: var(--success); margin-top: 12px">
+            → 기획서 필수 질문 + PLAN→GENERATE 체크리스트
+          </p>
+        </div>
+        <div class="card">
+          <h3>v1.0.3 이슈</h3>
+          <table style="margin: 0">
+            <tr>
+              <td><code>~/assets/</code> 경로 → 빌드 에러</td>
+            </tr>
+            <tr>
+              <td>미등록 컴포넌트 → 런타임 에러</td>
+            </tr>
+            <tr>
+              <td>API 호출 → 타임아웃 에러</td>
+            </tr>
+          </table>
+          <p style="color: var(--success); margin-top: 12px">
+            → 리소스 미존재 처리 + 빌드 호환성 검증
+          </p>
+        </div>
+        <div class="card">
+          <h3>v1.0.4 이슈</h3>
+          <table style="margin: 0">
+            <tr>
+              <td>DOM 뎁스 6~8단계 (목표: 3)</td>
+            </tr>
+            <tr>
+              <td>불필요 이미지 래핑</td>
+            </tr>
+            <tr>
+              <td>hover 오적용 (비인터랙티브)</td>
+            </tr>
+            <tr>
+              <td>중복 ID 발생</td>
+            </tr>
+          </table>
+          <p style="color: var(--success); margin-top: 12px">
+            → 1앵커=1Section, hover 규칙, ID 관리 (13개 규칙)
+          </p>
+        </div>
+      </div>
+
+      <!-- v1.0.5 강조 카드 -->
+      <div
+        class="card"
+        style="margin-top: 20px; border-left: 4px solid var(--primary)"
+      >
+        <h3>
+          v1.0.5 이슈
+          <span class="badge badge-success" style="margin-left: 8px">NEW</span>
+        </h3>
+        <div class="grid-2" style="margin-top: 12px">
+          <div>
+            <p style="font-weight: 600; margin-bottom: 8px">문제점</p>
+            <table style="margin: 0">
+              <tr>
+                <td>시맨틱 태그 판단 기준 부재</td>
+              </tr>
+              <tr>
+                <td>div vs semantic 기준 모호</td>
+              </tr>
+              <tr>
+                <td>검증이 "존재 여부"만 체크</td>
+              </tr>
+              <tr>
+                <td>공통 패턴 가이드 없음</td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <p style="font-weight: 600; margin-bottom: 8px">실제 발생 이슈</p>
+            <table style="margin: 0">
+              <tr>
+                <td><code>&lt;section&gt;</code> heading 없음</td>
+              </tr>
+              <tr>
+                <td><code>&lt;div @click&gt;</code> 클릭 이벤트</td>
+              </tr>
+              <tr>
+                <td>목록을 <code>&lt;div&gt;</code>로 구현</td>
+              </tr>
+              <tr>
+                <td><code>&lt;article&gt;</code> 오용</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <p style="color: var(--success); margin-top: 16px">
+          → 의사결정 플로우차트 + 시맨틱 체크리스트 + 자동 수정 로직 + 신규
+          가이드 문서
+        </p>
+      </div>
+    </section>
+
+    <!-- Slide 5: 업데이트 과정 -->
+    <section class="slide">
+      <span class="slide-number">05</span>
+      <h2>업데이트 과정</h2>
+      <div class="workflow-arrow" style="margin: 60px 0">
+        <span class="workflow-step">실제 작업</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">이슈 발견</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step active">규칙 추가</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">품질 향상</span>
+        <span class="arrow">→</span>
+        <span class="workflow-step">반복</span>
+      </div>
+      <div
+        style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px"
+      >
+        <div class="card" style="text-align: center">
+          <h3>v1.0.1</h3>
+          <p style="font-size: 2rem; color: var(--error)">82점</p>
+        </div>
+        <div class="card" style="text-align: center">
+          <h3>v1.0.3</h3>
+          <p style="font-size: 2rem; color: var(--warning)">91점</p>
+        </div>
+        <div class="card" style="text-align: center">
+          <h3>v1.0.4</h3>
+          <p style="font-size: 2rem; color: var(--success)">97점</p>
+        </div>
+        <div
+          class="card"
+          style="text-align: center; border: 2px solid var(--success)"
+        >
+          <h3>v1.0.5</h3>
+          <p style="font-size: 2rem; color: var(--success)">98점</p>
+          <span class="badge badge-success">시맨틱 강화</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 개선 후 결과 -->
+    <section class="slide">
+      <span class="slide-number">07</span>
+      <h2>개선 후 결과</h2>
+      <div class="grid-2" style="align-items: center">
+        <div style="text-align: center">
+          <div class="score-display">98점</div>
+          <p style="font-size: 1.5rem; margin-top: 16px">/ 100점</p>
+          <p><span class="badge badge-success">PASS</span> 95점 기준 통과</p>
+          <p
+            style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted)"
+          >
+            v1.0.5 시맨틱 강화 적용
+          </p>
+        </div>
+        <div>
+          <table>
+            <tr>
+              <th>기준</th>
+              <th>점수</th>
+              <th>상태</th>
+            </tr>
+            <tr>
+              <td>디자인 토큰 적용</td>
+              <td>10/10</td>
+              <td><span class="badge badge-success">Pass</span></td>
+            </tr>
+            <tr>
+              <td>시맨틱 HTML</td>
+              <td>10/10</td>
+              <td><span class="badge badge-success">Pass</span></td>
+            </tr>
+            <tr>
+              <td>DOM 뎁스 (3단계)</td>
+              <td>10/10</td>
+              <td><span class="badge badge-success">Pass</span></td>
+            </tr>
+            <tr>
+              <td>불필요 래핑 금지</td>
+              <td>9/10</td>
+              <td><span class="badge badge-warning">-1</span></td>
+            </tr>
+            <tr>
+              <td>프로젝트 컨벤션</td>
+              <td>10/10</td>
+              <td><span class="badge badge-success">Pass</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Thank You -->
+    <section class="slide" style="text-align: center">
+      <span class="slide-number">08</span>
+      <h1>Thank You</h1>
+      <p class="subtitle">Markup Automation Agent</p>
+      <div style="margin-top: 48px">
+        <p>명령어: <code>/markup</code></p>
+        <p style="margin-top: 16px">
+          6단계 워크플로우 | 14가지 품질 기준 | 95점+ 필수
+        </p>
+        <p style="margin-top: 16px">
+          <a
+            href="https://github.com/HunKim-Dev/mark-up-agent/tree/develop?tab=readme-ov-file#markup-agent-v104"
+            target="_blank"
+            style="color: var(--primary)"
+            >README</a
+          >
+        </p>
+      </div>
+    </section>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="imageModal">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <h3 class="modal-title" id="modalTitle">이미지</h3>
+        <div id="modalBody">
+          <!-- 이미지가 여기에 삽입됩니다 -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("imageModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalBody = document.getElementById("modalBody");
+        const modalClose = document.getElementById("modalClose");
+
+        // 모든 image-scroll 요소에 클릭 이벤트 추가
+        const imageScrolls = document.querySelectorAll(
+          ".version-card .image-scroll",
+        );
+
+        imageScrolls.forEach(function (scrollEl) {
+          scrollEl.addEventListener("click", function (e) {
+            const versionCard = scrollEl.closest(".version-card");
+            const title = versionCard.querySelector("h4").textContent;
+            const versionNum =
+              versionCard.querySelector(".version-num").textContent;
+
+            // 모달 제목 설정
+            modalTitle.textContent = title + " (" + versionNum + ")";
+
+            // 이미지 또는 플레이스홀더 복제
+            const img = scrollEl.querySelector("img");
+            const placeholder = scrollEl.querySelector(".image-placeholder");
+
+            modalBody.innerHTML = "";
+
+            if (img) {
+              const clonedImg = img.cloneNode(true);
+              clonedImg.style.maxWidth = "100%";
+              clonedImg.style.width = "auto";
+              modalBody.appendChild(clonedImg);
+            } else if (placeholder) {
+              const clonedPlaceholder = placeholder.cloneNode(true);
+              clonedPlaceholder.style.minHeight = "300px";
+              modalBody.appendChild(clonedPlaceholder);
+            }
+
+            // 모달 열기
+            modal.classList.add("active");
+            document.body.style.overflow = "hidden";
+          });
+        });
+
+        // 닫기 버튼 클릭
+        modalClose.addEventListener("click", function (e) {
+          e.stopPropagation();
+          closeModal();
+        });
+
+        // 오버레이 클릭 시 닫기
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+
+        // ESC 키로 닫기
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && modal.classList.contains("active")) {
+            closeModal();
+          }
+        });
+
+        function closeModal() {
+          modal.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+    </script>
+  </body>
+</html>
